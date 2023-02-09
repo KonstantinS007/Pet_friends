@@ -50,6 +50,7 @@ def test_add_new_pet_with_valid_data(name='Барбос', animal_type='Кот',
     assert result['animal_type'] == animal_type
     assert result['pet_photo'] == my_pets['pets'][0]['pet_photo']
 
+
 def test_successful_delete_self_pet():
     """Проверяем возможность удаления питомца"""
 
@@ -59,7 +60,7 @@ def test_successful_delete_self_pet():
 
     # Проверяем - если список своих питомцев пустой, то добавляем нового и опять запрашиваем список своих питомцев
     if len(my_pets['pets']) == 0:
-        pf.add_new_pet(auth_key, "Суперкот", "кот", "3", "images/cat1.jpg")
+        pf.add_new_pet(auth_key, "Супер кот", "кот", "3", "images/cat1.jpg")
         _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
 
     # Берём id первого питомца из списка и отправляем запрос на удаление
@@ -161,7 +162,7 @@ def test_get_api_key_for_no_valid_user2(email=valid_email, password=no_valid_pas
 
 
 def test_get_api_key_for_no_valid_user3(email=no_valid_email, password=valid_password):
-    """ Проверяем что при невалидном емаил нельзя получить ключ,
+    """ Проверяем что при невалидной почтой нельзя получить ключ,
      запрос api ключа возвращает статус 403
      и в результате не содержится слово key"""
 
@@ -188,7 +189,7 @@ def test_add_new_pet_with_no_valid_age(name='Василий', animal_type='Ко�
 
 
 def test_successful_delete_self_pet_with_valid_key_stranger_id():
-    """Проверяем возможность по чужому id удаления питомца
+    """Проверяем возможность по-чужому id удаления питомца
     со своего аккаунта, полученного id непосредственно с чужого аккаунта"""
 
     # Получаем ключ auth_key и запрашиваем список питомцев 2 аккаунта
@@ -197,7 +198,7 @@ def test_successful_delete_self_pet_with_valid_key_stranger_id():
 
     # Проверяем - если список своих питомцев пустой, то добавляем нового и опять запрашиваем список своих питомцев
     if len(my_pets['pets']) == 0:
-        pf.add_new_pet(auth_key2, "Суперкот", "кот", "3", "images/Cat2.jpg")
+        pf.add_new_pet(auth_key2, "Супер кот", "кот", "3", "images/Cat2.jpg")
         _, my_pets = pf.get_list_of_pets(auth_key2, "my_pets")
     # получаем ключ первого аккаунта и через него авторизуемся для удаления
     _, auth_key = pf.get_api_key(valid_email, valid_password)
@@ -248,7 +249,7 @@ def test_create_pet_simple_with_invalid_data(name='', animal_type='', age=''):
 
 
 def test_post_add_pet_no_valid_animal_type(name='Homa', animal_type='111', age='4'):
-    """ Проверяем, что нельзя добавить нового питомца c указанием цифр вместо типа"""
+    """ Проверяем, что нельзя добавить нового питомца с указанием цифр вместо типа"""
     _, auth_key = pf.get_api_key(valid_email, valid_password)
     status, result = pf.add_new_pet_no_foto(auth_key, name, animal_type, age)
     assert status != 200
@@ -256,7 +257,7 @@ def test_post_add_pet_no_valid_animal_type(name='Homa', animal_type='111', age='
 
 
 def test_post_add_pet_no_valid_age_max(name='Homa', animal_type='кот', age='999'):
-    """ Проверяем, что нельзя добавить нового питомца c указанием слишком большого значения возраста"""
+    """ Проверяем, что нельзя добавить нового питомца с указанием слишком большого значения возраста"""
     _, auth_key = pf.get_api_key(valid_email, valid_password)
     status, result = pf.add_new_pet_no_foto(auth_key, name, animal_type, age)
     assert status != 200
