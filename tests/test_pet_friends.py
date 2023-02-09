@@ -42,11 +42,13 @@ def test_add_new_pet_with_valid_data(name='Барбос', animal_type='Кот',
 
     # Добавляем питомца
     status, result = pf.add_new_pet(auth_key, name, animal_type, age, pet_photo)
-
+    _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
     # Сверяем полученный ответ с ожидаемым результатом
     assert status == 200
     assert result['name'] == name
-
+    assert result['age'] == age
+    assert result['animal_type'] == animal_type
+    assert result['pet_photo'] == my_pets['pets'][0]['pet_photo']
 
 def test_successful_delete_self_pet():
     """Проверяем возможность удаления питомца"""
@@ -100,10 +102,10 @@ def test_successful_update_self_pet_foto(pet_photo='images/Cat2.jpg'):
     # Если список не пустой, то пробуем добавить фото
     if len(my_pets['pets']) > 0:
         status, result = pf.update_pet_foto(auth_key, my_pets['pets'][0]['id'], pet_photo)
-
+        _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
         # Проверяем что статус ответа = 200 и имя питомца соответствует заданному
         assert status == 200
-
+        assert result['pet_photo'] == my_pets['pets'][0]['pet_photo']
     else:
         # если список питомцев пустой, то выкидываем исключение с текстом об отсутствии своих питомцев
         raise Exception("There is no my pets")
@@ -120,9 +122,10 @@ def test_successful_update_self_pet_foto_png(pet_photo='images/Cat1.png'):
     if len(my_pets['pets']) > 0:
         status, result = pf.update_pet_foto_png(auth_key, my_pets['pets'][0]['id'], pet_photo)
 
+        _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
         # Проверяем что статус ответа = 200 и имя питомца соответствует заданному
         assert status == 200
-
+        assert result['pet_photo'] == my_pets['pets'][0]['pet_photo']
     else:
         # если список питомцев пустой, то выкидываем исключение с текстом об отсутствии своих питомцев
         raise Exception("There is no my pets")

@@ -158,7 +158,8 @@ class PetFriends:
         with open(pet_photo, 'rb') as f:
             foto = f.read()
 
-        data = MultipartEncoder({
+        data = MultipartEncoder(
+            fields={
                 'pet_photo': (pet_photo, foto, 'image/png')
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
