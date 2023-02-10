@@ -160,7 +160,7 @@ class PetFriends:
 
         data = MultipartEncoder(
             fields={
-                'pet_photo': (pet_photo, foto, 'image/png')
+                'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'image/png')
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
         res = requests.post(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)

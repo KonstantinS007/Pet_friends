@@ -35,9 +35,9 @@ def test_add_new_pet_with_valid_data(name='Барбос', animal_type='Кот',
     """Проверяем что можно добавить питомца с корректными данными"""
 
     # Получаем полный путь изображения питомца и сохраняем в переменную pet_photo
-    pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
 
-    # Запрашиваем ключ api и сохраняем в переменную auth_key
+
+     # Запрашиваем ключ api и сохраняем в переменную auth_key
     _, auth_key = pf.get_api_key(valid_email, valid_password)
 
     # Добавляем питомца
@@ -49,6 +49,19 @@ def test_add_new_pet_with_valid_data(name='Барбос', animal_type='Кот',
     assert result['age'] == age
     assert result['animal_type'] == animal_type
     assert result['pet_photo'] == my_pets['pets'][0]['pet_photo']
+
+
+def test_update_pet_info(name='Был очень вкусный зайчик', animal_type='', age='5'):
+    '''Проверяем возможность изменения данных питомца'''
+    _, api_key = pf.get_api_key(valid_email, valid_password)
+    _, my_pets = pf.get_list_of_pets(api_key, 'my_pets')
+
+    if len(my_pets['pets']) > 0:
+        status, result = pf.update_pet_info(api_key, my_pets['pets'][0]['id'], name, animal_type, age)
+        assert status == 200
+        assert result['name'] == name
+    else:
+        raise Exception("Питомцы отсутствуют")
 
 
 def test_successful_delete_self_pet():
@@ -93,7 +106,7 @@ def test_add_new_pet_with_valid_data_no_foto(name='Василий', animal_type=
     assert result['animal_type'] == animal_type
 
 
-def test_successful_update_self_pet_foto(pet_photo='images/Cat2.jpg'):
+def test_successful_update_self_pet_foto(pet_photo='images/Cat.jpg'):
     pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
     """Проверяем возможность добавления фото питомца"""
     # Получаем ключ auth_key и список своих питомцев
