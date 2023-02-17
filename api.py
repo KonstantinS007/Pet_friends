@@ -1,8 +1,18 @@
 """Модуль 19"""
 import json
 import requests
-
 from requests_toolbelt.multipart.encoder import MultipartEncoder
+
+
+@pytest.fixture(scope="class")
+def get_key(request):
+    # переменные email и password нужно заменить своими учетными данными
+    response = requests.post(url='https://petfriends.skillfactory.ru/login',
+                             data={"email": email, "pass": password})
+    assert response.status_code == 200, 'Запрос выполнен неуспешно'
+    assert 'Cookie' in response.request.headers, 'В запросе не передан ключ авторизации'
+    print("\nreturn auth_key")
+    return response.request.headers.get('Cookie')
 
 
 class PetFriends:
@@ -47,7 +57,7 @@ class PetFriends:
         return status, result
 
     def add_new_pet(self, auth_key: json, name: str, animal_type: str,
-                    age: str, pet_photo: str) -> json:
+                    age: str, pet_photo: str):
         """Метод отправляет (запрос) на сервер данные о добавляемом питомце и возвращает статус
         запроса на сервер и результат в формате JSON с данными добавленного питомца"""
         with open(pet_photo, 'rb') as f:
@@ -88,7 +98,7 @@ class PetFriends:
         return status, result
 
     def update_pet_info(self, auth_key: json, pet_id: str, name: str,
-                        animal_type: str, age: int) -> json:
+                        animal_type: str, age: str) -> json:
         """Метод отправляет запрос на сервер об обновлении данных питомца по указанному ID и
         возвращает статус запроса и result в формате JSON с обновлённый данными питомца"""
 
