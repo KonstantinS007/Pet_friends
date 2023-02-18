@@ -2,7 +2,7 @@ from settings import valid_email, valid_password, no_valid_email, no_valid_passw
 import os
 import requests
 import pytest
-from api1 import PetFriends
+from api_fixcooki import PetFriends
 pf = PetFriends()
 # import api
 # pf = api.PetFriends()

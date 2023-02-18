@@ -1,8 +1,12 @@
 from settings import valid_email, valid_password, no_valid_email, no_valid_password, valid_email2, valid_password2
 import os
 from api import PetFriends
+import pytest
+import requests
+
 
 #    pytest test_pet_friends_classfixapi.py
+
 
 
 class TestClassPetsGetAPI:
@@ -249,14 +253,16 @@ class TestClassPetsApi:
 
 
 class TestClassPetsCooki:
-    def setup(self):
+
+    def setup(self, get_key):
         self.pf = PetFriends
         self.base_url = "https://petfriends.skillfactory.ru/"
         self.api_cooki = "Cookie"
+        self.api_cooki_key = get_key
 
-    def test_get_all_pets_with_valid_key(self, get_key, filter='my_pets'):
+    def test_get_all_pets_with_valid_key(self, filter='my_pets'):
 
-        status, result = self.pf.get_list_of_pets_cooki(self, get_key, filter)
+        status, result = self.pf.get_list_of_pets_cooki(self, filter)
 
         assert status == 200
         assert len(result['pets']) > 0

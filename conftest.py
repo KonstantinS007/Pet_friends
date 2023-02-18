@@ -1,11 +1,11 @@
 import pytest
-from datetime import datetime
 import requests
 from settings import valid_email, valid_password
 import json
+from datetime import datetime
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope="class", autouse=True)
 def time_delta():
     start_time = datetime.now()
     yield
@@ -31,7 +31,7 @@ def auth_key():
     return result
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope="class", autouse=True)
 def get_key():
     # переменные email и password нужно заменить своими учетными данными
     response = requests.post(url='https://petfriends.skillfactory.ru/login',
@@ -39,3 +39,5 @@ def get_key():
     assert response.status_code == 200, 'Запрос выполнен неуспешно'
     assert 'Cookie' in response.request.headers, 'В запросе не передан ключ авторизации'
     return response.request.headers.get('Cookie')
+
+

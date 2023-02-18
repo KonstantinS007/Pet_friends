@@ -170,9 +170,10 @@ class PetFriends:
             result = res.text
         return status, result
 
-    def get_list_of_pets_cooki(self, api_cooki_key, filter: str) -> json:
-
-        headers = {self.api_cooki: api_cooki_key}
+    def get_list_of_pets_cooki(self, filter: str) -> json:
+        a = self.api_cooki
+        b = self.api_cooki_key
+        headers = {a: b}
         filter = {'filter': filter}
 
         res = requests.get(self.base_url + 'api/pets', headers=headers, params=filter)
