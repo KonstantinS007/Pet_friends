@@ -5,7 +5,7 @@ import pytest
 import requests
 
 
-#    pytest test_pet_friends_classfixapi.py
+#    pytest test_pet_friends_class_fixapi.py
 
 
 
@@ -253,16 +253,14 @@ class TestClassPetsApi:
 
 
 class TestClassPetsCooki:
-
-    def setup(self, get_key):
+    def setup(self):
         self.pf = PetFriends
         self.base_url = "https://petfriends.skillfactory.ru/"
         self.api_cooki = "Cookie"
-        self.api_cooki_key = get_key
 
-    def test_get_all_pets_with_valid_key(self, filter='my_pets'):
+    def test_get_all_pets_with_valid_key(self, get_key, filter='my_pets'):
 
-        status, result = self.pf.get_list_of_pets_cooki(self, filter)
+        status, result = self.pf.get_list_of_pets_cooki(self, get_key, filter)
 
         assert status == 200
         assert len(result['pets']) > 0

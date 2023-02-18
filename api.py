@@ -8,6 +8,8 @@ class PetFriends:
     """API библиотека к веб приложению Pet Friends"""
 
 #    pytest test_pet_friends.py
+    def __init__(self):
+        self.base_url = "https://petfriends.skillfactory.ru/"
 
     def get_api_key(self, email: str, passwd: str) -> json:
         """Метод делает запрос к API сервера и возвращает статус запроса и результат в формате
@@ -170,10 +172,10 @@ class PetFriends:
             result = res.text
         return status, result
 
-    def get_list_of_pets_cooki(self, filter: str) -> json:
-        a = self.api_cooki
-        b = self.api_cooki_key
-        headers = {a: b}
+    def get_list_of_pets_cooki(self, auth_key, filter: str = "") -> json:
+
+
+        headers = {'Cookie': auth_key}
         filter = {'filter': filter}
 
         res = requests.get(self.base_url + 'api/pets', headers=headers, params=filter)
