@@ -47,7 +47,7 @@ class PetFriends:
         return status, result
 
     def add_new_pet(self, get_key, name: str, animal_type: str,
-                    age: str, pet_photo: str) -> json:
+                    age: str, pet_photo: str):  # -> json
         """Метод отправляет (запрос) на сервер данные о добавляемом питомце и возвращает статус
         запроса на сервер и результат в формате JSON с данными добавленного питомца"""
         with open(pet_photo, 'rb') as f:
@@ -60,9 +60,8 @@ class PetFriends:
                 'age': age,
                 'pet_photo': (pet_photo, foto, 'image/jpeg')
             })
-        headers = {'Content-Type': data.content_type}
-        cookies = {"Cookie": get_key}
-        res = requests.post(self.base_url + 'api/pets', cookies=cookies, headers=headers, data=data)
+        headers = {"Cookie": get_key, 'Content-Type': data.content_type}
+        res = requests.post(self.base_url + 'api/pets', headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
