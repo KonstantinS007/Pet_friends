@@ -9,7 +9,7 @@ class PetFriends:
     def __init__(self):
         self.base_url = "https://petfriends.skillfactory.ru/"
 
-#    pytest test_pet_friends1.py
+#    pytest test_pet_friends_fixcooki.py
 
     def get_api_key(self, email: str, passwd: str) -> json:
         """Метод делает запрос к API сервера и возвращает статус запроса и результат в формате
