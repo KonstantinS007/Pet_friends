@@ -5,7 +5,7 @@ import pytest
 import requests
 
 
-#    pytest test_pet_friends_class_fixapi.py
+#    pytest test_pet_friends_yclass_fixapi.py
 
 
 

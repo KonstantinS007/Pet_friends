@@ -41,3 +41,7 @@ def get_key():
     return response.request.headers.get('Cookie')
 
 
+@pytest.fixture(autouse=True)
+def request_fixture(request):
+    if 'Pets' in request.function.__name__:
+        print(f"\nЗапущен тест из сьюта Дом Питомца: {request.function.__name__}")

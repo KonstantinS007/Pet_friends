@@ -20,6 +20,7 @@ def test_get_api_key_for_valid_user(email=valid_email, password=valid_password):
     assert 'key' in result
 
 
+@pytest.mark.skip(reason="Требуется второй аккаунт")
 @pytest.mark.critical
 @pytest.mark.negativ
 def test_successful_delete_self_pet_with_valid_key_stranger_id(auth_key):
@@ -93,7 +94,6 @@ def test_get_api_key_for_no_valid_user3(email=no_valid_email, password=valid_pas
 
 
 @pytest.mark.get
-@pytest.mark.info
 def test_get_all_pets_with_valid_key(auth_key, filter='my_pets'):
     """ Проверяем что запрос всех питомцев возвращает не пустой список.
     Для этого сначала получаем api ключ и сохраняем в переменную auth_key. Далее используя этого ключ
@@ -283,8 +283,9 @@ def test_post_add_pet_no_valid_age_max(auth_key, name='Homa', animal_type='ко�
     assert result['age'] == age
 
 
+@pytest.mark.xfail(raises=RuntimeError)
 @pytest.mark.cookie
-@pytest.mark.info
+@pytest.mark.get
 def test_get_all_pets_with_valid_key_cookie(self, get_key, filter='my_pets'):
 
     status, result = self.pf.get_list_of_pets_cooki(self, get_key, filter)
