@@ -1,47 +1,8 @@
 from settings import valid_email, valid_password, no_valid_email, no_valid_password, valid_email2, valid_password2
-import requests
-import json
 import os
-import pytest
 from api import PetFriends
-from datetime import datetime
-# import api
-# pf = api.PetFriends()
+
 #    pytest test_pet_friends_classfixapi.py
-
-@pytest.fixture(autouse=True)
-def time_delta():
-    start_time = datetime.now()
-    yield
-    end_time = datetime.now()
-    print(f"\nТест шел: {end_time - start_time}")
-
-
-@pytest.fixture(scope="class", autouse=True)
-def auth_key():
-    headers = {
-        'email': valid_email,
-        'password': valid_password
-    }
-    res = requests.get("https://petfriends.skillfactory.ru/" + 'api/key', headers=headers)
-    status = res.status_code
-    result = ""
-    assert res.status_code == 200, 'Запрос выполнен неуспешно'
-    try:
-        result = res.json()
-    except json.decoder.JSONDecodeError:
-        result = res.text
-    assert 'key' in result, 'В запросе не передан ключ авторизации'
-    return result
-
-@pytest.fixture(autouse=True)
-def get_key():
-    # переменные email и password нужно заменить своими учетными данными
-    response = requests.post(url='https://petfriends.skillfactory.ru/login',
-                             data={"email": valid_email, "pass": valid_password})
-    assert response.status_code == 200, 'Запрос выполнен неуспешно'
-    assert 'Cookie' in response.request.headers, 'В запросе не передан ключ авторизации'
-    return response.request.headers.get('Cookie')
 
 
 class TestClassPetsGetAPI:
@@ -86,7 +47,7 @@ class TestClassPetsGetAPI:
          и в результате не содержится слово key"""
 
         # Отправляем запрос и сохраняем полученный ответ с кодом статуса в status, а текст ответа в result
-        status, result = self.pf.get_api_key(email, password)
+        status, result = self.pf.get_api_key(self, email, password)
 
         # Сверяем полученные данные с нашими ожиданиями
         assert status == 403
@@ -99,7 +60,7 @@ class TestClassPetsGetAPI:
          и в результате не содержится слово key"""
 
         # Отправляем запрос и сохраняем полученный ответ с кодом статуса в status, а текст ответа в result
-        status, result = self.pf.get_api_key(email, password)
+        status, result = self.pf.get_api_key(self, email, password)
 
         # Сверяем полученные данные с нашими ожиданиями
         assert status == 403
@@ -112,7 +73,7 @@ class TestClassPetsGetAPI:
          и в результате не содержится слово key"""
 
         # Отправляем запрос и сохраняем полученный ответ с кодом статуса в status, а текст ответа в result
-        status, result = self.pf.get_api_key(email, password)
+        status, result = self.pf.get_api_key(self, email, password)
 
         # Сверяем полученные данные с нашими ожиданиями
         assert status == 403
@@ -123,14 +84,15 @@ class TestClassPetsApi:
     def setup(self):
         self.pf = PetFriends
         self.base_url = "https://petfriends.skillfactory.ru/"
+        self.api_cooki = 'auth_key'
 
     def test_get_all_pets_with_valid_key(self, auth_key, filter='my_pets'):
         """ Проверяем что запрос всех питомцев возвращает не пустой список.
         Для этого сначала получаем api ключ и сохраняем в переменную auth_key. Далее используя этого ключ
         запрашиваем список всех питомцев и проверяем что список не пустой.
         Доступное значение параметра filter - 'my_pets' либо '' """
-
-        status, result = self.pf.get_list_of_pets(self, auth_key, filter)
+        auth_key = auth_key['key']
+        status, result = self.pf.get_list_of_pets_cooki(self, auth_key, filter)
 
         assert status == 200
         assert len(result['pets']) > 0
@@ -290,14 +252,11 @@ class TestClassPetsCooki:
     def setup(self):
         self.pf = PetFriends
         self.base_url = "https://petfriends.skillfactory.ru/"
+        self.api_cooki = "Cookie"
 
     def test_get_all_pets_with_valid_key(self, get_key, filter='my_pets'):
-        """ Проверяем что запрос всех питомцев возвращает не пустой список.
-        Для этого сначала получаем api ключ и сохраняем в переменную auth_key. Далее используя этого ключ
-        запрашиваем список всех питомцев и проверяем что список не пустой.
-        Доступное значение параметра filter - 'my_pets' либо '' """
 
-        status, result = self.pf.get_list_of_pets(self, get_key, filter)
+        status, result = self.pf.get_list_of_pets_cooki(self, get_key, filter)
 
         assert status == 200
         assert len(result['pets']) > 0

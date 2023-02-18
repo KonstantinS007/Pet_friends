@@ -7,8 +7,6 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 class PetFriends:
     """API библиотека к веб приложению Pet Friends"""
 
-    def __init__(self):
-        self.base_url = "https://petfriends.skillfactory.ru/"
 #    pytest test_pet_friends.py
 
     def get_api_key(self, email: str, passwd: str) -> json:
@@ -172,3 +170,16 @@ class PetFriends:
             result = res.text
         return status, result
 
+    def get_list_of_pets_cooki(self, api_cooki_key, filter: str) -> json:
+
+        headers = {self.api_cooki: api_cooki_key}
+        filter = {'filter': filter}
+
+        res = requests.get(self.base_url + 'api/pets', headers=headers, params=filter)
+        status = res.status_code
+        result = ""
+        try:
+            result = res.json()
+        except json.decoder.JSONDecodeError:
+            result = res.text
+        return status, result
