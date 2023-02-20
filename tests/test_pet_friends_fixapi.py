@@ -5,7 +5,7 @@ import pytest
 import requests
 pf = PetFriends()
 
-#    pytest test_pet_friends_fixapi.py
+#       pytest test_pet_friends_fixapi.py > myoutput.txt> log.txt
 
 
 @pytest.mark.negativ

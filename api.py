@@ -1,7 +1,30 @@
 """Модуль 19"""
 import json
 import requests
-from requests_toolbelt.multipart.encoder import MultipartEncoder
+from requests.multipart.encoder import MultipartEncoder
+from decorator import post_api_log, get_api_log, put_api_log, delete_api_log
+
+
+@post_api_log
+def post_request(url, headers, data):
+    return requests.post(url=url, headers=headers, data=data)
+
+
+@get_api_log
+def get_request(url, headers, params=None):
+    return requests.get(url=url, headers=headers, params=params)
+
+
+@delete_api_log
+def delete_request(url, headers, path):
+    url = url + path
+    return requests.delete(url=url, headers=headers)
+
+
+@put_api_log
+def put_request(url, headers, data, path):
+    url = url + path
+    return requests.put(url=url, headers=headers, data=data)
 
 
 class PetFriends:
@@ -28,7 +51,7 @@ class PetFriends:
             result = res.text
         return status, result
 
-    def get_list_of_pets(self, auth_key: json, filter: str = "") -> json:
+    def get_list_of_pets(self, auth_key: json, filter: str = ""):  # -> json
         """Метод делает запрос к API сервера и возвращает статус запроса и результат в формате JSON
         со списком найденных питомцев, совпадающих с фильтром. На данный момент фильтр может иметь
         либо пустое значение - получить список всех питомцев, либо 'my_pets' - получить список
@@ -37,7 +60,7 @@ class PetFriends:
         headers = {'auth_key': auth_key['key']}
         filter = {'filter': filter}
 
-        res = requests.get(self.base_url + 'api/pets', headers=headers, params=filter)
+        res = get_request(self.base_url + 'api/pets', headers=headers, params=filter)
         status = res.status_code
         result = ""
         try:
@@ -61,7 +84,7 @@ class PetFriends:
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
 
-        res = requests.post(self.base_url + 'api/pets', headers=headers, data=data)
+        res = post_request(self.base_url + 'api/pets', headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -99,13 +122,14 @@ class PetFriends:
             'animal_type': animal_type
         }
 
-        res = requests.put(self.base_url + 'api/pets/' + pet_id, headers=headers, data=data)
+        res = put_request(self.base_url + 'api/pets/' + pet_id, headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
             result = res.json()
         except json.decoder.JSONDecodeError:
             result = res.text
+        print(result)
         return status, result
 
 # Новые модули запросов
@@ -123,7 +147,7 @@ class PetFriends:
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
 
-        res = requests.post(self.base_url + 'api/create_pet_simple', headers=headers, data=data)
+        res = post_request(self.base_url + 'api/create_pet_simple', headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -143,7 +167,7 @@ class PetFriends:
                 'pet_photo': (pet_photo, foto, 'image/jpeg')
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
-        res = requests.post(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
+        res = post_request(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -163,7 +187,7 @@ class PetFriends:
                 'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'image/png')
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
-        res = requests.post(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
+        res = post_request(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -174,11 +198,10 @@ class PetFriends:
 
     def get_list_of_pets_cooki(self, auth_key, filter: str = "") -> json:
 
-
         headers = {'Cookie': auth_key}
         filter = {'filter': filter}
 
-        res = requests.get(self.base_url + 'api/pets', headers=headers, params=filter)
+        res = get_request(self.base_url + 'api/pets', headers=headers, params=filter)
         status = res.status_code
         result = ""
         try:

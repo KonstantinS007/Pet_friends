@@ -1,0 +1,5 @@
+============= Request =============
+Doing PUT request to https://petfriends.skillfactory.ru/api/pets/6ce591fb-13b4-456a-acff-404106565565
+Headers of request: {'auth_key': '32d5bba55e9fb0989bee23dbe19d003c0d548f9ff76c7f95b939eeea'}
+Parameters of request path pet_id: {'name': 'Барсик', 'age': '5', 'animal_type': 'Вислоух'}
+Request body: {'name': 'Барсик', 'age': '5', 'animal_type': 'Вислоух'}
