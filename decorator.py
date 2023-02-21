@@ -18,7 +18,7 @@ def edit_data(json):  # Укорачивает запись значений в 
 def post_api_log(func):
     def wrapper(*args, **kwargs):
         with open('log.txt', 'w', encoding="UTF-8") as f:
-            print("============= Request =============", file=f)
+            print("Request", file=f)
             print(f"Doing POST request to {args[0]}", file=f)
             try:
                 print(f"Path parameters: {kwargs['params']}", file=f)
@@ -28,7 +28,7 @@ def post_api_log(func):
             data_repr = repr(kwargs['data'])
             print(f"Request body: {data_repr}", file=f)
             value = func(*args, **kwargs)
-            print("============= Response =============", file=f)
+            print("Response", file=f)
             response_code = repr(value)[10:-1]
             print(f"Code of answer to response - {response_code}", file=f)
             if value.status_code != 200:
@@ -74,7 +74,7 @@ def put_api_log(func):
             print("Request", file=f)
             print(f"Doing PUT request to {args[0]}", file=f)
             print(f"Headers of request: {kwargs['headers']}", file=f)
-            print(f"Parameters of request path pet_id: {kwargs['data']}", file=f)
+            print(f"Parameters of request path pet_id: {kwargs['path']}", file=f)
             data_repr = repr(kwargs['data'])
             print(f"Request body: {data_repr}", file=f)
             value = func(*args, **kwargs)
@@ -98,8 +98,8 @@ def delete_api_log(func):
         with open('log.txt', 'a', encoding="Windows-1251") as f:
             print("Request")
             print(f"Doing DELETE response to {args[0]}", file=f)
-            # print(f"Headers of request: {kwargs['headers']}", file=f)
-            # print(f"Parameter of path request pet_id: {kwargs['path']}", file=f)
+            print(f"Headers of request: {kwargs['headers']}", file=f)
+            print(f"Parameter of path request pet_id: {kwargs['path']}", file=f)
             value = func(*args, **kwargs)
             print("Response")
             response_code = repr(value)

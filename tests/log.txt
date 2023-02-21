@@ -1,5 +1,7 @@
-============= Request =============
-Doing PUT request to https://petfriends.skillfactory.ru/api/pets/6ce591fb-13b4-456a-acff-404106565565
-Headers of request: {'auth_key': '32d5bba55e9fb0989bee23dbe19d003c0d548f9ff76c7f95b939eeea'}
-Parameters of request path pet_id: {'name': 'Барсик', 'age': '5', 'animal_type': 'Вислоух'}
-Request body: {'name': 'Барсик', 'age': '5', 'animal_type': 'Вислоух'}
+Request
+Doing POST request to https://petfriends.skillfactory.ru/api/create_pet_simple
+Headers of request: {'auth_key': '32d5bba55e9fb0989bee23dbe19d003c0d548f9ff76c7f95b939eeea', 'Content-Type': 'multipart/form-data; boundary=cb4b987efc814d91883760089a4d0e48'}
+Request body: <MultipartEncoder: {'name': 'Homa', 'animal_type': 'кот', 'age': '999'}>
+Response
+Code of answer to response - [200]
+Response body: {'_id': '', 'age': '999', 'animal_type': 'кот', 'created_at': '1676885106.1235569', 'id': '1ffb1a96-95eb-4ecf-802b-e1e233db78d4', 'name': 'Homa', 'pet_photo': '', 'user_id': '32d5bba55e9fb0989bee23dbe19d003c0d548f9ff76c7f95b939eeea'}

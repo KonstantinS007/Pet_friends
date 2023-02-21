@@ -1,7 +1,7 @@
 """Модуль 19"""
 import json
 import requests
-from requests.multipart.encoder import MultipartEncoder
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 from decorator import post_api_log, get_api_log, put_api_log, delete_api_log
 
 
