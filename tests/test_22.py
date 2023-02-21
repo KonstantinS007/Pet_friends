@@ -165,11 +165,11 @@ def special_chars():
 #        assert result['animal_type'] == animal_type
 
 
-def is_age_valid(age):
-    # Проверяем, что возраст - это число от 1 до 49 и целое
-    return age.isdigit() \
-        and 0 < int(age) < 50 \
-        and float(age) == int(age)
+# def is_age_valid(age):
+#     # Проверяем, что возраст - это число от 1 до 49 и целое
+#     return age.isdigit() \
+#         and 0 < int(age) < 50 \
+#         and float(age) == int(age)
 
 
 # @pytest.mark.parametrize("name"
@@ -214,7 +214,7 @@ def test_add_new_pet_simple(name, animal_type, age):
    """Проверяем, что можно добавить питомца с различными данными"""
 
    # Добавляем питомца
-   pytest.status, result = pf.add_new_pet_simple(pytest.key, name, animal_type, age)
+   pytest.status, result = pf.add_new_pet_simple1(pytest.key, name, animal_type, age)
 
    # Сверяем полученный ответ с ожидаемым результатом
    assert pytest.status == 200
@@ -233,7 +233,7 @@ def test_add_new_pet_simple(name, animal_type, age):
 def test_add_new_pet_simple_negative(name, animal_type, age):
 
    # Добавляем питомца
-   pytest.status, result = pf.add_new_pet_simple(pytest.key, name, animal_type, age)
+   pytest.status, result = pf.add_new_pet_simple1(pytest.key, name, animal_type, age)
 
    # Сверяем полученный ответ с ожидаемым результатом
    assert pytest.status == 400
