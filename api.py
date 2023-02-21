@@ -1,7 +1,7 @@
 """Модуль 19"""
 import json
+from requests_toolbelt.multipart import MultipartEncoder
 import requests
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 from decorator import post_api_log, get_api_log, put_api_log, delete_api_log
 
 
@@ -122,7 +122,7 @@ class PetFriends:
             'animal_type': animal_type
         }
 
-        res = put_request(self.base_url + 'api/pets/' + pet_id, headers=headers, data=data)
+        res = requests.put(self.base_url + 'api/pets/' + pet_id, headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -208,4 +208,62 @@ class PetFriends:
             result = res.json()
         except json.decoder.JSONDecodeError:
             result = res.text
+        return status, result
+
+
+    def get_api_key1(self, email: str, passwd: str) -> json:
+        """Метод делает запрос к API сервера и возвращает статус запроса и результат в формате
+        JSON с уникальным ключом пользователя, найденного по указанным email и паролем"""
+
+        headers = {
+            'email': email,
+            'password': passwd
+        }
+        res = requests.get(self.base_url+'api/key', headers=headers)
+        status = res.status_code
+        result = ""
+        try:
+            result = res.json()
+        except json.decoder.JSONDecodeError:
+            result = res.text
+        return status, result
+
+    def get_list_of_pets1(self, auth_key: json, filter: str = ""):  # -> json
+        """Метод делает запрос к API сервера и возвращает статус запроса и результат в формате JSON
+        со списком найденных питомцев, совпадающих с фильтром. На данный момент фильтр может иметь
+        либо пустое значение - получить список всех питомцев, либо 'my_pets' - получить список
+        собственных питомцев"""
+
+        headers = {'auth_key': auth_key['key']}
+        filter = {'filter': filter}
+
+        res = requests.get(self.base_url + 'api/pets', headers=headers, params=filter)
+        status = res.status_code
+        result = ""
+        try:
+            result = res.json()
+        except json.decoder.JSONDecodeError:
+            result = res.text
+        return status, result
+
+    def add_new_pet_simple1(self, auth_key: json, name: str, animal_type: str, age: str) -> json:
+        """Метод отправляет (постит) на сервер данные о добавляемом питомце и возвращает статус
+        запроса и результат в формате JSON с данными добавленного питомца"""
+
+        data = MultipartEncoder(
+            fields={
+                'name': name,
+                'animal_type': animal_type,
+                'age': age
+            })
+        headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
+
+        res = requests.post(self.base_url + 'api/create_pet_simple', headers=headers, data=data)
+        status = res.status_code
+        result = ""
+        try:
+            result = res.json()
+        except json.decoder.JSONDecodeError:
+            result = res.text
+        print(result)
         return status, result

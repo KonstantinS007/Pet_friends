@@ -7,6 +7,10 @@ pf = PetFriends()
 #    pytest test_pet_friends.py
 
 
+
+
+
+
 def test_get_api_key_for_valid_user(email=valid_email, password=valid_password):
     """ Проверяем что запрос api ключа возвращает статус 200 и в результате содержится слово key"""
 

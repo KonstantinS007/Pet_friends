@@ -45,3 +45,5 @@ def get_key():
 def request_fixture(request):
     if 'Pets' in request.function.__name__:
         print(f"\nЗапущен тест из сьюта Дом Питомца: {request.function.__name__}")
+
+
