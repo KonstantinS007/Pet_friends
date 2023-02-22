@@ -2,6 +2,29 @@
 import json
 from requests_toolbelt.multipart import MultipartEncoder
 import requests
+from decorator import post_api_log, get_api_log, put_api_log, delete_api_log
+
+
+@post_api_log
+def post_request(url, headers, data):
+    return requests.post(url=url, headers=headers, data=data)
+
+
+@get_api_log
+def get_request(url, headers, params=None):
+    return requests.get(url=url, headers=headers, params=params)
+
+
+@delete_api_log
+def delete_request(url, headers, path):
+    url = url + path
+    return requests.delete(url=url, headers=headers)
+
+
+@put_api_log
+def put_request(url, headers, data, path):
+    url = url + path
+    return requests.put(url=url, headers=headers, data=data)
 
 
 class PetFriends:
@@ -37,7 +60,7 @@ class PetFriends:
         headers = {'auth_key': auth_key['key']}
         filter = {'filter': filter}
 
-        res = requests.get(self.base_url + 'api/pets', headers=headers, params=filter)
+        res = get_request(self.base_url + 'api/pets', headers=headers, params=filter)
         status = res.status_code
         result = ""
         try:
@@ -61,7 +84,7 @@ class PetFriends:
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
 
-        res = requests.post(self.base_url + 'api/pets', headers=headers, data=data)
+        res = post_request(self.base_url + 'api/pets', headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -124,7 +147,7 @@ class PetFriends:
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
 
-        res = requests.post(self.base_url + 'api/create_pet_simple', headers=headers, data=data)
+        res = post_request(self.base_url + 'api/create_pet_simple', headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -144,7 +167,7 @@ class PetFriends:
                 'pet_photo': (pet_photo, foto, 'image/jpeg')
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
-        res = requests.post(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
+        res = post_request(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -164,7 +187,7 @@ class PetFriends:
                 'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'image/png')
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
-        res = requests.post(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
+        res = post_request(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
         status = res.status_code
         result = ""
         try:
@@ -178,7 +201,7 @@ class PetFriends:
         headers = {'Cookie': auth_key}
         filter = {'filter': filter}
 
-        res = requests.get(self.base_url + 'api/pets', headers=headers, params=filter)
+        res = get_request(self.base_url + 'api/pets', headers=headers, params=filter)
         status = res.status_code
         result = ""
         try:

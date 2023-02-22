@@ -4,9 +4,7 @@ from api import PetFriends
 import pytest
 import requests
 
-
-#    pytest test_pet_friends_yclass_fixapi.py
-
+#    pytest test_pet_friends_yclass.py
 
 
 class TestClassPetsGetAPI:
@@ -90,13 +88,13 @@ class TestClassPetsApi:
         self.base_url = "https://petfriends.skillfactory.ru/"
         self.api_cooki = 'auth_key'
 
-    def test_get_all_pets_with_valid_key(self, auth_key, filter='my_pets'):
+    def test_get_all_pets_with_valid_key(self, get_key, filter='my_pets'):
         """ Проверяем что запрос всех питомцев возвращает не пустой список.
         Для этого сначала получаем api ключ и сохраняем в переменную auth_key. Далее используя этого ключ
         запрашиваем список всех питомцев и проверяем что список не пустой.
         Доступное значение параметра filter - 'my_pets' либо '' """
-        auth_key = auth_key['key']
-        status, result = self.pf.get_list_of_pets_cooki(self, auth_key, filter)
+
+        status, result = self.pf.get_list_of_pets_cooki(self, get_key, filter)
 
         assert status == 200
         assert len(result['pets']) > 0

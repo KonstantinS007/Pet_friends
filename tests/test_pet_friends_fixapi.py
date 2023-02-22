@@ -1,6 +1,6 @@
 from settings import valid_email, valid_password, no_valid_email, no_valid_password, valid_email2, valid_password2
 import os
-from api import PetFriends
+from api0 import PetFriends
 import pytest
 import requests
 pf = PetFriends()
