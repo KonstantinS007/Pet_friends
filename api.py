@@ -7,7 +7,7 @@ import requests
 class PetFriends:
     """API библиотека к веб приложению Pet Friends"""
 
-#    pytest test_pet_friends.py
+#    pytest test_pet_friends19.py
     def __init__(self):
         self.base_url = "https://petfriends.skillfactory.ru/"
 
@@ -161,7 +161,7 @@ class PetFriends:
 
         data = MultipartEncoder(
             fields={
-                'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'image/png')
+                'pet_photo': (pet_photo, foto, 'image/png')
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
         res = requests.post(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
@@ -173,7 +173,7 @@ class PetFriends:
             result = res.text
         return status, result
 
-    def get_list_of_pets_cooki(self, auth_key, filter: str = "") -> json:
+    def get_list_of_pets_cookie(self, auth_key, filter: str = "") -> json:
 
         headers = {'Cookie': auth_key}
         filter = {'filter': filter}

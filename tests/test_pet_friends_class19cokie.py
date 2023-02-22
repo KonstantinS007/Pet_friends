@@ -1,10 +1,8 @@
 from settings import valid_email, valid_password, no_valid_email, no_valid_password, valid_email2, valid_password2
 import os
 from api import PetFriends
-import pytest
-import requests
 
-#    pytest test_pet_friends_yclass.py
+#    pytest test_pet_friends_class19cokie.py
 
 
 class TestClassPetsGetAPI:

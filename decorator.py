@@ -38,8 +38,9 @@ def post_api_log(func):
                     print(f"Response body: {edit_data(value.json())}", file=f)
                 except KeyError:
                     print(f"Response body: {value.json()}", file=f)
-            print("  ")
+
             return value
+    print("  ")
     return wrapper
 
 
@@ -64,9 +65,8 @@ def get_api_log(func):
                     print(f"response body: {edit_data(value.json())}", file=f)
                 except KeyError:
                     print(f"response body: {value.json()}", file=f)
-            print("  ")
             return value
-
+    print("  ")
     return wrapper
 
 
@@ -91,8 +91,9 @@ def put_api_log(func):
                     print(f"Response body: {edit_data(value.json())}", file=f)
                 except KeyError:
                     print(f"Response body: {value.json()}", file=f)
-            print("  ")
+
             return value
+    print("  ")
     return wrapper
 
 
@@ -107,6 +108,6 @@ def delete_api_log(func):
             print("Response-------------------------------------------")
             response_code = repr(value)
             print(f"Code of answer to request- {response_code}", file=f)
-            print("  ")
             return value
+    print("  ")
     return wrapper

@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 
 
-@pytest.fixture(scope="class", autouse=True)
+@pytest.fixture(scope="class")  # , autouse=True
 def time_delta():
     start_time = datetime.now()
     yield
@@ -13,7 +13,7 @@ def time_delta():
     print(f"\nТест шел: {end_time - start_time}")
 
 
-@pytest.fixture(scope="class", autouse=True)
+@pytest.fixture(scope="class")  # , autouse=True
 def auth_key():
     headers = {
         'email': valid_email,
@@ -31,7 +31,7 @@ def auth_key():
     return result
 
 
-@pytest.fixture(scope="class", autouse=True)
+@pytest.fixture(scope="class")
 def get_key():
     # переменные email и password нужно заменить своими учетными данными
     response = requests.post(url='https://petfriends.skillfactory.ru/login',
@@ -41,7 +41,7 @@ def get_key():
     return response.request.headers.get('Cookie')
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()  # autouse=True
 def request_fixture(request):
     if 'Pets' in request.function.__name__:
         print(f"\nЗапущен тест из сьюта Дом Питомца: {request.function.__name__}")

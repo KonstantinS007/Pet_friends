@@ -30,7 +30,7 @@ def put_request(url, headers, data, path):
 class PetFriends:
     """API библиотека к веб приложению Pet Friends"""
 
-#    pytest test_pet_friends.py
+#    pytest test_pet_friends19.py
     def __init__(self):
         self.base_url = "https://petfriends.skillfactory.ru/"
 
@@ -42,7 +42,7 @@ class PetFriends:
             'email': email,
             'password': passwd
         }
-        res = requests.get(self.base_url+'api/key', headers=headers)
+        res = get_request(self.base_url+'api/key', headers=headers)
         status = res.status_code
         result = ""
         try:
@@ -184,7 +184,7 @@ class PetFriends:
 
         data = MultipartEncoder(
             fields={
-                'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'image/png')
+                'pet_photo': (pet_photo, foto, 'image/png')
             })
         headers = {'auth_key': auth_key['key'], 'Content-Type': data.content_type}
         res = post_request(self.base_url + '/api/pets/set_photo/' + pet_id, headers=headers, data=data)
