@@ -1,3 +1,4 @@
+from os import path
 def edit_data(json):  # Укорачивает запись значений в лог
     try:
         list_of_pets = json["pets"]
@@ -48,7 +49,7 @@ def get_api_log(func):
     def wrapper(*args, **kwargs):
         with open('log.txt', 'a', encoding="UTF-8") as f:
             print("Request--------------------------", file=f)
-            print(f"Doing GET request to {args[0]}", file=f)
+            print(f"Запрос GET {args[0]}", file=f)
             try:
                 print(f"Parameters of path: {kwargs['params']}", file=f)
             except KeyError:
@@ -57,57 +58,57 @@ def get_api_log(func):
             value = func(*args, **kwargs)
             print("Response------------------------------", file=f)
             response_code = repr(value)
-            print(f"Code of answer to response - {response_code}", file=f)
+            print(f"Код ответа - {response_code}", file=f)
             if value.status_code != 200:
-                print(f"Response body: {value.text}", file=f)
+                print(f"Ответ body: {value.text}", file=f)
             else:
                 try:
-                    print(f"response body: {edit_data(value.json())}", file=f)
+                    print(f"Ответ body: {edit_data(value.json())}", file=f)
                 except KeyError:
-                    print(f"response body: {value.json()}", file=f)
+                    print(f"Ответ body: {value.json()}", file=f)
             return value
     print("  ")
     return wrapper
 
 
-def put_api_log(func):
+def put_api_log(func, path='/some_default_path'):
     def wrapper(*args, **kwargs):
         with open('log.txt', 'a', encoding="UTF-8") as f:
             print("Request---------------------------------", file=f)
-            print(f"Doing PUT request to {args[0]}", file=f)
+            print(f"Что изменили {args[0]}", file=f)
             print(f"Headers of request: {kwargs['headers']}", file=f)
             print(f"Parameters of request path pet_id: {kwargs['path']}", file=f)
             data_repr = repr(kwargs['data'])
-            print(f"Request body: {data_repr}", file=f)
+            print(f"Ответ body: {data_repr}", file=f)
             value = func(*args, **kwargs)
             print(value)
             print("Response--------------------------------------", file=f)
             response_code = repr(value)
-            print(f"Code of answer to response - {response_code}", file=f)
+            print(f"Код ответа - {response_code}", file=f)
             if value.status_code != 200:
-                print(f"Response body: {value.text}", file=f)
+                print(f"Ответ body: {value.text}", file=f)
             else:
                 try:
-                    print(f"Response body: {edit_data(value.json())}", file=f)
+                    print(f"Ответ body: {edit_data(value.json())}", file=f)
                 except KeyError:
-                    print(f"Response body: {value.json()}", file=f)
+                    print(f"Ответ body: {value.json()}", file=f)
 
             return value
     print("  ")
     return wrapper
 
 
-def delete_api_log(func):
+def delete_api_log(func, path='/some_default_path'):
     def wrapper(*args, **kwargs):
         with open('log.txt', 'a', encoding="Windows-1251") as f:
             print("Request-----------------------------------------")
-            print(f"Doing DELETE response to {args[0]}", file=f)
-            print(f"Headers of request: {kwargs['headers']}", file=f)
-            print(f"Parameter of path request pet_id: {kwargs['path']}", file=f)
-            value = func(*args, **kwargs)
+            print(f"Что удаленно {args[0]}", file=f)
+            print(f"Headers: {kwargs['headers']}", file=f)
+            # print(f"Parameter of path request pet_id: {kwargs['path']}", file=f)
+            value = func(*args, **kwargs)  # *args, **kwargs
             print("Response-------------------------------------------")
             response_code = repr(value)
-            print(f"Code of answer to request- {response_code}", file=f)
+            print(f"Код ответа- {response_code}", file=f)
             return value
     print("  ")
     return wrapper

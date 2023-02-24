@@ -94,14 +94,14 @@ class PetFriends:
         print(result)
         return status, result
 
-    def delete_pet(self, auth_key: json, pet_id: str) -> json:
+    def delete_pet(self, auth_key: json, pet_id: str,) -> json:
         """Метод отправляет на сервер запрос на удаление питомца по указанному ID и возвращает
         статус запроса и результат в формате JSON с текстом уведомления об успешном удалении.
         На сегодняшний день тут есть баг - в result приходит пустая строка, но status при этом = 200"""
 
         headers = {'auth_key': auth_key['key']}
 
-        res = requests.delete(self.base_url + 'api/pets/' + pet_id, headers=headers)
+        res = delete_request(self.base_url + 'api/pets/' + pet_id, headers=headers)
         status = res.status_code
         result = ""
         try:
@@ -122,7 +122,7 @@ class PetFriends:
             'animal_type': animal_type
         }
 
-        res = requests.put(self.base_url + 'api/pets/' + pet_id, headers=headers, data=data)
+        res = put_request(self.base_url + 'api/pets/' + pet_id, headers=headers, data=data)
         status = res.status_code
         result = ""
         try:

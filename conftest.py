@@ -5,12 +5,12 @@ import json
 from datetime import datetime
 
 
-@pytest.fixture(scope="class")  # , autouse=True
-def time_delta():
-    start_time = datetime.now()
-    yield
-    end_time = datetime.now()
-    print(f"\nТест шел: {end_time - start_time}")
+# @pytest.fixture(scope="class")  # , autouse=True
+# def time_delta():
+#     start_time = datetime.now()
+#     yield
+#     end_time = datetime.now()
+#     print(f"\nТест шел: {end_time - start_time}")
 
 
 @pytest.fixture(scope="class")  # , autouse=True
