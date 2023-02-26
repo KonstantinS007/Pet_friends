@@ -1,4 +1,6 @@
-from os import path
+import functools
+
+
 def edit_data(json):  # Укорачивает запись значений в лог
     try:
         list_of_pets = json["pets"]
@@ -104,7 +106,7 @@ def delete_api_log(func, path='/some_default_path'):
             print("Request-----------------------------------------")
             print(f"Что удаленно {args[0]}", file=f)
             print(f"Headers: {kwargs['headers']}", file=f)
-            # print(f"Parameter of path request pet_id: {kwargs['path']}", file=f)
+            print(f"Parameter of path request pet_id: {kwargs['path']}", file=f)
             value = func(*args, **kwargs)  # *args, **kwargs
             print("Response-------------------------------------------")
             response_code = repr(value)
@@ -112,3 +114,42 @@ def delete_api_log(func, path='/some_default_path'):
             return value
     print("  ")
     return wrapper
+
+
+def log_api(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        value = func(*args, **kwargs)
+        status = str(value[0])
+        result = str(value[1])
+        request = str(value[2:4])
+        responce_headers = str(value[4:])
+        with open('log.txt', 'a', encoding='utf8') as f:
+            f.write(f'''Информация запроса:
+------------------
+Статус запроса:
+{status}
+Параметры запроса:
+{request}
+Информация ответа:
+------------------
+Тело ответа:
+{result}
+Заголовок ответа:
+{responce_headers}''')
+    return wrapper
+
+
+def generate_string(n):
+   return "x" * n
+
+def russian_chars():
+   return 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+
+
+def chinese_chars():
+   return '的一是不了人我在有他这为之大来以个中上们'
+
+
+def special_chars():
+   return '|\\/!@#$%^&*()-_=+`~?"№;:[]{}'

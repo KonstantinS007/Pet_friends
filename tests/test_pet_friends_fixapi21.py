@@ -3,10 +3,12 @@ import os
 from api21 import PetFriends
 import pytest
 pf = PetFriends()
+from decorator import log_api
+
 
 #       pytest test_pet_friends_fixapi21.py > myoutput.txt> log.txt
 
-
+@log_api
 @pytest.mark.negativ
 @pytest.mark.auth
 def test_get_api_key_for_valid_user(email=valid_email, password=valid_password):
@@ -17,8 +19,10 @@ def test_get_api_key_for_valid_user(email=valid_email, password=valid_password):
     #  Сверяем полученные данные с нашими ожиданиями
     assert status == 200
     assert 'key' in result
+    return status, result
 
 
+@log_api
 @pytest.mark.skip(reason="Требуется второй аккаунт")
 @pytest.mark.critical
 @pytest.mark.negativ
@@ -37,13 +41,15 @@ def test_successful_delete_self_pet_with_valid_key_stranger_id(auth_key):
 
     # Берём id первого питомца из списка 2 аккаунта и отправляем запрос на удаление
     pet_id = my_pets['pets'][0]['id']
-    status, _ = pf.delete_pet(auth_key, pet_id)
+    status, result = pf.delete_pet(auth_key, pet_id)
 
     # Проверяем что статус ответа равен 200 и в списке питомцев нет id удалённого питомца
     assert status == 403
     assert pet_id in my_pets.values()
+    return status, result
 
 
+@log_api
 @pytest.mark.critical
 @pytest.mark.negativ
 @pytest.mark.auth
@@ -58,8 +64,10 @@ def test_get_api_key_for_no_valid_user1(email=no_valid_email, password=no_valid_
     # Сверяем полученные данные с нашими ожиданиями
     assert status == 403
     assert not'key' in result
+    return status, result
 
 
+@log_api
 @pytest.mark.critical
 @pytest.mark.negativ
 @pytest.mark.auth
@@ -74,8 +82,10 @@ def test_get_api_key_for_no_valid_user2(email=valid_email, password=no_valid_pas
     # Сверяем полученные данные с нашими ожиданиями
     assert status == 403
     assert 'key' not in result
+    return status, result
 
 
+@log_api
 @pytest.mark.critical
 @pytest.mark.negativ
 @pytest.mark.auth
@@ -90,8 +100,10 @@ def test_get_api_key_for_no_valid_user3(email=no_valid_email, password=valid_pas
     # Сверяем полученные данные с нашими ожиданиями
     assert status == 403
     assert 'key' not in result
+    return status, result
 
 
+@log_api
 @pytest.mark.get
 def test_get_all_pets_with_valid_key(auth_key, filter='my_pets'):
     """ Проверяем что запрос всех питомцев возвращает не пустой список.
@@ -104,8 +116,10 @@ def test_get_all_pets_with_valid_key(auth_key, filter='my_pets'):
     assert status == 200
     assert len(result['pets']) > 0
     print(result['pets'])
+    return status, result
 
 
+@log_api
 @pytest.mark.post
 @pytest.mark.edit
 def test_add_new_pet_with_valid_data(auth_key, name='Васька', animal_type='Кот',
@@ -124,8 +138,10 @@ def test_add_new_pet_with_valid_data(auth_key, name='Васька', animal_type=
     assert result['age'] == age
     assert result['animal_type'] == animal_type
     assert result['pet_photo'] == my_pets['pets'][0]['pet_photo']
+    return status, result
 
 
+@log_api
 @pytest.mark.put
 @pytest.mark.edit
 def test_update_pet_info1(auth_key, name='Барсик', animal_type='Вислоух', age='5'):
@@ -138,8 +154,10 @@ def test_update_pet_info1(auth_key, name='Барсик', animal_type='Висло
         assert result['name'] == name
     else:
         raise Exception("Питомцы отсутствуют")
+    return status, result
 
 
+@log_api
 @pytest.mark.delete
 @pytest.mark.edit
 def test_successful_delete_self_pet(auth_key):
@@ -154,7 +172,7 @@ def test_successful_delete_self_pet(auth_key):
         _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
     print(my_pets)    # Берём id первого питомца из списка и отправляем запрос на удаление
     pet_id = my_pets['pets'][0]['id']
-    status, _ = pf.delete_pet(auth_key, pet_id)
+    status, result = pf.delete_pet(auth_key, pet_id)
     print(my_pets)
     # Ещё раз запрашиваем список своих питомцев
     _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
@@ -162,8 +180,10 @@ def test_successful_delete_self_pet(auth_key):
     # Проверяем что статус ответа равен 200 и в списке питомцев нет id удалённого питомца
     assert status == 200
     assert pet_id not in my_pets.values()
+    return status, result
 
 
+@log_api
 @pytest.mark.post
 @pytest.mark.edit
 def test_add_new_pet_with_valid_data_no_foto(auth_key, name='Василий', animal_type='Котофей', age='3'):
@@ -177,8 +197,10 @@ def test_add_new_pet_with_valid_data_no_foto(auth_key, name='Василий', an
     assert result['name'] == name
     assert result['age'] == age
     assert result['animal_type'] == animal_type
+    return status, result
 
 
+@log_api
 @pytest.mark.put
 @pytest.mark.edit
 def test_successful_update_self_pet_foto(auth_key, pet_photo='images/Cat.jpg'):
@@ -196,8 +218,10 @@ def test_successful_update_self_pet_foto(auth_key, pet_photo='images/Cat.jpg'):
     else:
         # если список питомцев пустой, то выкидываем исключение с текстом об отсутствии своих питомцев
         raise Exception("There is no my pets")
+    return status, result
 
 
+@log_api
 @pytest.mark.put
 @pytest.mark.edit
 def test_successful_update_self_pet_foto_png(auth_key, pet_photo='images/Cat1.png'):
@@ -215,9 +239,11 @@ def test_successful_update_self_pet_foto_png(auth_key, pet_photo='images/Cat1.pn
         assert result['pet_photo'] == my_pets['pets'][0]['pet_photo']
     else:
         # если список питомцев пустой, то выкидываем исключение с текстом об отсутствии своих питомцев
-        raise Exception("There is no my pets")
+        raise Exception("There is no my pet")
+    return status, result
 
 
+@log_api
 @pytest.mark.negativ
 def test_add_new_pet_with_no_valid_age(auth_key, name='Василий', animal_type='Котофей', age='-1'):
     """Проверяем что нельзя добавить питомца с некорректными данными,
@@ -228,11 +254,12 @@ def test_add_new_pet_with_no_valid_age(auth_key, name='Василий', animal_t
     # Сверяем полученный ответ с ожидаемым результатом
     assert status == 403
     assert 'name' not in result
+    return status, result
 
 
 # Либо что нельзя получить id питомца и его удалить
 
-
+@log_api
 @pytest.mark.negativ
 def test_successful_delete_self_pet_valid_key_stranger_id(auth_key):
     """Проверяем возможность получение чужого id со своего аккаунта и с помощью его удаления питомца"""
@@ -248,15 +275,17 @@ def test_successful_delete_self_pet_valid_key_stranger_id(auth_key):
         else:
             s = s + 1
             n = True
-    status, _ = pf.delete_pet(auth_key, no_my_id)
+    status, result = pf.delete_pet(auth_key, no_my_id)
     # Ещё раз запрашиваем список своих питомцев
     _, all_pets = pf.get_list_of_pets(auth_key, "")
 
     # Проверяем что статус ответа неравен 200 и в списке питомцев не удалился по id чужой питомец
     assert status != 200
     assert no_my_id in all_pets.values()
+    return status, result
 
 
+@log_api
 @pytest.mark.negativ
 def test_create_pet_simple_with_invalid_data(auth_key, name='', animal_type='', age=''):
     """Проверяем что нельзя добавить питомца с пустыми данными (без фото)"""
@@ -264,24 +293,30 @@ def test_create_pet_simple_with_invalid_data(auth_key, name='', animal_type='', 
     status, result = pf.add_new_pet_no_foto(auth_key, name, animal_type, age)
 
     assert status != 200
+    return status, result
 
 
+@log_api
 @pytest.mark.negativ
 def test_post_add_pet_no_valid_animal_type(auth_key, name='Homa', animal_type='111', age='4'):
     """ Проверяем, что нельзя добавить нового питомца с указанием цифр вместо типа"""
     status, result = pf.add_new_pet_no_foto(auth_key, name, animal_type, age)
     assert status != 200
     assert result['animal_type'] == animal_type
+    return status, result
 
 
+@log_api
 @pytest.mark.negativ
 def test_post_add_pet_no_valid_age_max(auth_key, name='Homa', animal_type='кот', age='999'):
     """ Проверяем, что нельзя добавить нового питомца с указанием слишком большого значения возраста"""
     status, result = pf.add_new_pet_no_foto(auth_key, name, animal_type, age)
     assert status != 200
     assert result['age'] == age
+    return status, result
 
 
+@log_api
 @pytest.mark.xfail(raises=RuntimeError)
 @pytest.mark.cookie
 @pytest.mark.get
@@ -292,3 +327,4 @@ def test_get_all_pets_with_valid_key_cookie(self, get_key, filter='my_pets'):
     assert status == 200
     assert len(result['pets']) > 0
     print(result['pets'])
+    return status, result
