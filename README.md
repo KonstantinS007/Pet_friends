@@ -13,9 +13,9 @@ Testing_REST_api_PetFriends https://petfriends.skillfactory.ru.
 
 В файле app.py расположенном в корневой директории содержится библиотека к REST api веб сервису PetFriends.
 
-В директории /tests располагается файл с тестами и /images лежат фотографии для теста.
+В директории (tests) находятся файлы с тестами и (images) лежат фотографии для теста.
 
-Practice 19.7.2 test_pet_friends19.py; api.py; settings.py.
+Practice 19.7.2 test_pet_friends19.py; api.py; settings.py. 
 С классом тестов test_pet_friends_class19cokie.py(c фикстурой автокей и куки-кей conftest.py )
 
 Practice 21 test_pet_friends_fixapi21.py с декораторами запросов составления логов из decorator.py в log.txt
