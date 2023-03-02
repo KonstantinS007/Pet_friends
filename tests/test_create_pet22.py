@@ -20,20 +20,21 @@ def chinese_chars():
 def special_chars():
    return '|\\/!@#$%^&*()-_=+`~?"№;:[]{}'
 
-@pytest.mark.parametrize("name"
-   , [generate_string(255), generate_string(1001), russian_chars(), russian_chars().upper(), chinese_chars(),
-      special_chars(), '123']
-   , ids=['255 symbols', 'more than 1000 symbols', 'russian', 'RUSSIAN', 'chinese', 'specials', 'digit'])
-@pytest.mark.parametrize("animal_type"
-   , [generate_string(255), generate_string(1001), russian_chars(), russian_chars().upper(), chinese_chars(),
-      special_chars(), '123']
-   , ids=['255 symbols', 'more than 1000 symbols', 'russian', 'RUSSIAN', 'chinese', 'specials', 'digit'])
-@pytest.mark.parametrize("age", ['1'], ids=['min'])
+
 class TestClassPetsApi:
     def setup(self):
         self.pf = PetFriends
         self.base_url = "https://petfriends.skillfactory.ru/"
 
+    @pytest.mark.parametrize("name"
+        , [generate_string(255), generate_string(1001), russian_chars(), russian_chars().upper(), chinese_chars(),
+           special_chars(), '123']
+        , ids=['255 symbols', 'more than 1000 symbols', 'russian', 'RUSSIAN', 'chinese', 'specials', 'digit'])
+    @pytest.mark.parametrize("animal_type"
+        , [generate_string(255), generate_string(1001), russian_chars(), russian_chars().upper(), chinese_chars(),
+           special_chars(), '123']
+        , ids=['255 symbols', 'more than 1000 symbols', 'russian', 'RUSSIAN', 'chinese', 'specials', 'digit'])
+    @pytest.mark.parametrize("age", ['1'], ids=['min'])
     def test_add_new_pet_with_valid_data(self, auth_key, name='Васька', animal_type='Кот',
                                          age='1', pet_photo='images/Cat.jpg'):
         """Проверяем что можно добавить питомца с корректными данными"""
