@@ -66,7 +66,6 @@ class TestClassPetsGetAPI:
         assert status == 403
         assert 'key' not in result
 
-
     def test_get_api_key_for_no_valid_user3(self, email=no_valid_email, password=valid_password):
         """ Проверяем что при невалидной почтой нельзя получить ключ,
          запрос api ключа возвращает статус 403
@@ -92,7 +91,7 @@ class TestClassPetsApi:
         запрашиваем список всех питомцев и проверяем что список не пустой.
         Доступное значение параметра filter - 'my_pets' либо '' """
 
-        status, result = self.pf.get_list_of_pets_cooki(self, get_key, filter)
+        status, result = self.pf.get_list_of_pets_cookie(self, get_key, filter)
 
         assert status == 200
         assert len(result['pets']) > 0

@@ -35,8 +35,8 @@ class TestClassPetsApi:
            special_chars(), '123']
         , ids=['255 symbols', 'more than 1000 symbols', 'russian', 'RUSSIAN', 'chinese', 'specials', 'digit'])
     @pytest.mark.parametrize("age", ['1'], ids=['min'])
-    def test_add_new_pet_with_valid_data(self, auth_key, name='Васька', animal_type='Кот',
-                                         age='1', pet_photo='images/Cat.jpg'):
+    def test_add_new_pet_with_valid_data(self, auth_key, name, animal_type,
+                                         age, pet_photo='images/Cat.jpg'):
         """Проверяем что можно добавить питомца с корректными данными"""
         # pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
         # Получаем полный путь изображения питомца и сохраняем в переменную pet_photo
