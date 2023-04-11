@@ -7,8 +7,8 @@ def edit_data(json):  # Укорачивает запись значений в 
     except KeyError:
         list_of_pets = [json]
     for i in list_of_pets:
-        if len(i["pet_photo"]) > 10:
-            i["pet_photo"] = i["pet_photo"][:10]
+        if len(i["pet_photo"]) > 5:
+            i["pet_photo"] = i["pet_photo"][:5]
         if len(i["age"]) > 4:
             i['age'] = i['age'][:4]
         if len(i["animal_type"]) > 10:
@@ -44,6 +44,7 @@ def post_api_log(func):
 
             return value
     print("  ")
+    print("  ")
     return wrapper
 
 
@@ -70,6 +71,7 @@ def get_api_log(func):
                     print(f"Ответ body: {value.json()}", file=f)
             return value
     print("  ")
+    print("  ")
     return wrapper
 
 
@@ -93,9 +95,10 @@ def put_api_log(func, path='/some_default_path'):
                 try:
                     print(f"Ответ body: {edit_data(value.json())}", file=f)
                 except KeyError:
-                    print(f"Ответ body: {value.json()}", file=f)
+                    print(f"Ответ body: {edit_data(value.json())}", file=f)
 
             return value
+    print("  ")
     print("  ")
     return wrapper
 
@@ -137,6 +140,9 @@ def log_api(func):
 {result}
 Заголовок ответа:
 {responce_headers}''')
+
+    print("  ")
+    print("  ")
     return wrapper
 
 

@@ -317,12 +317,12 @@ def test_post_add_pet_no_valid_age_max(auth_key, name='Homa', animal_type='ко�
 
 
 @log_api
-@pytest.mark.xfail(raises=RuntimeError)
+# @pytest.mark.xfail(raises=RuntimeError)
 @pytest.mark.cookie
 @pytest.mark.get
-def test_get_all_pets_with_valid_key_cookie(self, get_key, filter='my_pets'):
+def test_get_all_pets_with_valid_key_cookie(get_key, filter='my_pets'):
 
-    status, result = self.pf.get_list_of_pets_cooki(self, get_key, filter)
+    status, result = pf.get_list_of_pets_cooki(get_key, filter)
 
     assert status == 200
     assert len(result['pets']) > 0
